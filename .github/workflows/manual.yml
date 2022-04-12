@@ -1,35 +1,41 @@
-name: Send mail
-uses: dawidd6/action-send-mail@v3
+name: Run Script
+
 on:
-    workflow_dispatch
-with:
-    # Required mail server address:
-    server_address: smtp.gmail.com
-    # Required mail server port:
-    server_port: 465
-    # Optional (recommended): mail server username:
-    username: ${{secrets.MAIL_USERNAME}}
-    # Optional (recommended) mail server password:
-    password: ${{secrets.MAIL_PASSWORD}}
-    # Required mail subject:
-    subject: Github Actions job result
-    # Required recipients' addresses:
-    to: lalwani.roshani@tftus.com
-    # Required sender full name (address can be skipped):
-    from: Sahid khan # <khan.sahid@tftus.com>
-    # Optional whether this connection use TLS (default is true if server_port is 465)
-    secure: true
-    # Optional plain body:
-    body: Build job of ${{github.repository}} completed successfully!
-    # Optional HTML body read from file:
-    html_body: <a href></a>
-    # Optional carbon copy recipients:
-    reply_to: khan.sahid@tftus.com
-    # Optional Message ID this message is replying to:
-    ignore_cert: true
-    # Optional converting Markdown to HTML (set content_type to text/html too):
-    convert_markdown: true
-    # Optional attachments:
-    attachments: https://github.com/SahidTft/git_task1/suites/6088128382/logs?attempt=2
-    # Optional priority: 'high', 'normal' (default) or 'low'
-    priority: low
+  push:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+      - uses: jannekem/run-python-script-action@v1
+        id: script
+        with:
+          fail-on-error: false
+          script: |
+            print("Doing something that will fail")
+            import smtplib
+
+            sender = "Private Person <khan.sahid@tftus.com>"
+            receiver = "A Test User <lalwani.roshani@tftus.com>"
+
+           message = f"""\
+           Subject: Hi Mailtrap
+           To: {receiver}
+           From: {sender}
+
+           This is a test e-mail message."""
+
+           with smtplib.SMTP("smtp.mailtrap.io", 2525) as server:
+             server.login("35279e197d12c3", "963b06387f51f4")
+             server.sendmail(sender, receiver, message)
+
+      - name: Print errors
+        if: steps.script.outputs.error == 'true'
+        run: |
+          printenv "SCRIPT_STDOUT"
+          printenv "SCRIPT_STDERR"
+        env:
+          SCRIPT_STDOUT: ${{ steps.script.outputs.stdout }}
+          SCRIPT_STDERR: ${{ steps.script.outputs.stderr }} 
