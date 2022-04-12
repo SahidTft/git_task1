@@ -1,37 +1,35 @@
-# This is a basic workflow that is manually triggered
-
-name: Manual workflow
-
-# Controls when the action will run. Workflow runs when manually triggered using the UI
-# or API.
+name: Send mail
+uses: dawidd6/action-send-mail@v3
 on:
-  workflow_dispatch:
-    # Inputs the workflow accepts.
-    inputs:
-      name:
-        # Friendly description to be shown in the UI instead of 'name'
-        description: 'Person to greet'
-        # Default value if no value is explicitly provided
-        default: 'World'
-        # Input has to be provided for the workflow to run
-        required: true
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
-jobs:
-  # This workflow contains a single job called "greet"
-  greet:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-    # Runs a single command using the runners shell
-    - name: Send greeting
-      run: echo "Hello ${{ github.event.inputs.name }}"
-    - name: mail
-      uses: cinotify/github-action@main
-      with:
-        to: 'khan.sahid@tftus.com'
-        subject: 'building main'
-        body: 'This is a notification from GitHub actions.'
-      
+    workflow_dispatch
+with:
+    # Required mail server address:
+    server_address: smtp.gmail.com
+    # Required mail server port:
+    server_port: 465
+    # Optional (recommended): mail server username:
+    username: ${{secrets.MAIL_USERNAME}}
+    # Optional (recommended) mail server password:
+    password: ${{secrets.MAIL_PASSWORD}}
+    # Required mail subject:
+    subject: Github Actions job result
+    # Required recipients' addresses:
+    to: lalwani.roshani@tftus.com
+    # Required sender full name (address can be skipped):
+    from: Sahid khan # <khan.sahid@tftus.com>
+    # Optional whether this connection use TLS (default is true if server_port is 465)
+    secure: true
+    # Optional plain body:
+    body: Build job of ${{github.repository}} completed successfully!
+    # Optional HTML body read from file:
+    html_body: <a href></a>
+    # Optional carbon copy recipients:
+    reply_to: khan.sahid@tftus.com
+    # Optional Message ID this message is replying to:
+    ignore_cert: true
+    # Optional converting Markdown to HTML (set content_type to text/html too):
+    convert_markdown: true
+    # Optional attachments:
+    attachments: https://github.com/SahidTft/git_task1/suites/6088128382/logs?attempt=2
+    # Optional priority: 'high', 'normal' (default) or 'low'
+    priority: low
