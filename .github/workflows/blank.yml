@@ -1,7 +1,0 @@
- name: CINotify Email
-
-  uses: cinotify/github-action@main
-with:
-  to: 'sahidkhan242001@gmail.com'
-  subject: 'building main'
-  body: 'This is a notification from GitHub actions.'
