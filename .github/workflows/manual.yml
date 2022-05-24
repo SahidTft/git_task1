@@ -6,10 +6,10 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-    - name: executing remote ssh commands using password
-      uses: appleboy/ssh-action@master
-      with:
+     - name: ls -a via ssh
+       uses: garygrossgarten/github-action-ssh@release
+       with:
+        command: ls -a
         host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.PASSWORD }}
-        script: whoami
+        username: ubuntu
+        privateKey: ${{ secrets.PASSWORD}}
