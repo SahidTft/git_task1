@@ -12,4 +12,4 @@ jobs:
         command: ls -a
         host: ${{ secrets.HOST }}
         username: ubuntu
-        privateKey: ${{ secrets.PASSWORD}}
+        privateKey: ${{ secrets.PASSWORD }}
