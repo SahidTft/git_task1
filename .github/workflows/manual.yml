@@ -1,41 +1,16 @@
-name: Run Script
-
-on:
-  push:
-
+name: remote ssh command
+on: [push]
 jobs:
+
   build:
+    name: Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-      - uses: jannekem/run-python-script-action@v1
-        id: script
-        with:
-          fail-on-error: false
-          script: |
-            print("Doing something that will fail")
-            import smtplib
-
-            sender = "Private Person <khan.sahid@tftus.com>"
-            receiver = "A Test User <lalwani.roshani@tftus.com>"
-
-            message = f"""\
-            Subject: Hi Mailtrap
-            To: {receiver}
-            From: {sender}
-
-            This is a test e-mail message."""
-
-            with smtplib.SMTP("smtp.mailtrap.io", 2525) as server:
-              server.login("35279e197d12c3", "963b06387f51f4")
-              server.sendmail(sender, receiver, message)
-
-      - name: Print errors
-        if: steps.script.outputs.error == 'true'
-        run: |
-          printenv "SCRIPT_STDOUT"
-          printenv "SCRIPT_STDERR"
-        env:
-          SCRIPT_STDOUT: ${{ steps.script.outputs.stdout }}
-          SCRIPT_STDERR: ${{ steps.script.outputs.stderr }} 
+    - name: executing remote ssh commands using password
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.PASSWORD }}
+        port: ${{ secrets.PORT }}
+        script: whoami
