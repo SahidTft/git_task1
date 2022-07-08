@@ -1,18 +1,8 @@
-name: Create envfile
-
-on: [ push ]
-
+name: hello-world
+on: push
 jobs:
-
-  create-envfile:
- 
+  my-job:
     runs-on: ubuntu-latest
- 
     steps:
-    - name: Make envfile
-      uses: SpicyPizza/create-envfile@v1.3
-      with:
-        envkey_SOME_API_KEY: "123456abcdef"
-        envkey_SECRET_KEY: ${{ secrets.NAME }}
-        file_name: .env
-        fail_on_empty: false
+      - name: my-step
+        run: echo "Hello World!"
