@@ -1,8 +1,9 @@
 name: hello-world
 on: push
 jobs:
-  my-job:
+  my-job: 
     runs-on: ubuntu-latest
+    environment: dev
     steps:
       - name: my-step
-        run: echo "Hello World!"
+        run: echo {{secret.name}}
