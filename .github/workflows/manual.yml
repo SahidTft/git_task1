@@ -1,15 +1,8 @@
-name: remote ssh command
-on: [push]
+name: hello-world
+on: push
 jobs:
-
-  build:
-    name: Build
+  my-job:
     runs-on: ubuntu-latest
     steps:
-     - name: ls -a via ssh
-       uses: garygrossgarten/github-action-ssh@release
-       with:
-        command: ls -a
-        host: ${{ secrets.HOST }}
-        username: ubuntu
-        key: ${{ secrets.PASSWORD }}
+      - name: my-step
+        run: echo "Hello World!"
